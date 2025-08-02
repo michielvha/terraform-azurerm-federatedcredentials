@@ -6,17 +6,19 @@ variable "purpose" {
   type = string
 }
 
-variable "subject" {
-  type    = string
-  default = ""
-}
-
-variable "service_account" {
-  type = object({
+variable "service_accounts" {
+  type = list(object({
     name      = string
     namespace = string
-  })
-  default = null
+  }))
+  description = "List of Kubernetes service accounts to create federated credentials for"
+  default     = []
+}
+
+variable "custom_subjects" {
+  type        = list(string)
+  default     = []
+  description = "Custom subject strings (use this for advanced scenarios or non-standard subjects)"
 }
 
 variable "audience" {
@@ -45,18 +47,5 @@ variable "resource_group" {
 variable "custom_tags" {
   type        = map(string)
   default     = null
-  description = "Additional tags for Engie"
-}
-
-variable "extra_subjects" {
-  type    = list(string)
-  default = []
-}
-
-variable "extra_service_accounts" {
-  type = list(object({
-    name      = string
-    namespace = string
-  }))
-  default = []
+  description = "Additional tags for resources"
 }

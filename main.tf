@@ -8,19 +8,8 @@ resource "azurerm_user_assigned_identity" "user_assigned_identity" {
   })
 }
 
-
-resource "azurerm_federated_identity_credential" "federated_identity_credential" {
-  for_each            = toset([local.subject])
-  parent_id           = azurerm_user_assigned_identity.user_assigned_identity[0].id
-  audience            = [var.audience]
-  name                = replace(local.subject, ":", "_")
-  resource_group_name = var.resource_group.name
-  issuer              = var.oidc_issuer_url
-  subject             = local.subject
-}
-
-resource "azurerm_federated_identity_credential" "extra_federated_identity_credentials" {
-  for_each            = toset(local.extra_subjects)
+resource "azurerm_federated_identity_credential" "federated_identity_credentials" {
+  for_each            = toset(local.all_subjects)
   parent_id           = azurerm_user_assigned_identity.user_assigned_identity[0].id
   audience            = [var.audience]
   name                = replace(each.value, ":", "_")
