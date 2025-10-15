@@ -37,6 +37,7 @@ metadata:
   namespace: default
   annotations:
     azure.workload.identity/client-id: <user-assigned-identity-client-id>
+    azure.workload.identity/tenant-id: <user-assigned-identity-tenant-id>
 ---
 apiVersion: apps/v1
 kind: Deployment
