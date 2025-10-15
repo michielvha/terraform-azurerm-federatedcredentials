@@ -14,9 +14,14 @@ module "federated_credentials" {
     {
       name      = "app-service-account"
       namespace = "production"
+    },
+    {
+      name      = "app-service-account-2"
+      namespace = "production"
     }
   ]
 
+  // only used in advanced scenarios
   custom_subjects = [
     "system:serviceaccount:custom-namespace:special-service-account"
   ]
