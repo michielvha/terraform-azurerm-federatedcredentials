@@ -1,0 +1,115 @@
+formatter: "markdown"
+
+version: ""
+
+recursive:
+  enabled: false
+  path: modules
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Federated Credentials Terraform Module
+
+  This Terraform module creates an Azure User Assigned Identity with Federated Identity Credentials, enabling secure authentication between Kubernetes service accounts and Azure resources using OpenID Connect (OIDC).
+
+  ## Overview
+
+  The module simplifies the setup of workload identity federation between Azure and Kubernetes clusters. It creates:
+
+  - An Azure User Assigned Identity
+  - Federated Identity Credentials that trust Kubernetes service accounts
+  - Support for multiple service accounts through additional subjects
+
+  This enables Kubernetes pods to authenticate to Azure services without storing long-lived secrets, following Azure's recommended security practices for workload identity.
+
+  ## Usage
+
+  See the [example.d](./example.d/main.tf) directory for complete usage examples.
+
+  ## Getting the OIDC Issuer URL
+
+  For AKS clusters, you can get the OIDC issuer URL using:
+
+  ```bash
+  az aks show --resource-group <resource-group> --name <cluster-name> --query "oidcIssuerProfile.issuerUrl" -o tsv
+  ```
+
+  ## Kubernetes Configuration
+
+  After creating the federated credentials, configure your Kubernetes service account:
+
+  ```yaml
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: my-service-account
+    namespace: default
+    annotations:
+      azure.workload.identity/client-id: <user-assigned-identity-client-id>
+  ---
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: my-app
+  spec:
+    template:
+      metadata:
+        labels:
+          azure.workload.identity/use: "true"
+      spec:
+        serviceAccountName: my-service-account
+        # ...
+  ```
+
+  ## Prerequisites
+
+  - Azure Kubernetes Service (AKS) cluster with OIDC issuer enabled
+  - Terraform >= 0.13
+  - Azure provider configured
+
+  {{ .Requirements }}
+
+  {{ .Providers }}
+
+  {{ .Modules }}
+
+  {{ .Resources }}
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
+
