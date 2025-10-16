@@ -1,4 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
 # Azure Federated Credentials Terraform Module
 
 This Terraform module creates an Azure User Assigned Identity with Federated Identity Credentials, enabling secure authentication between Kubernetes service accounts and Azure resources using OpenID Connect (OIDC).
@@ -59,6 +58,7 @@ spec:
 - Terraform >= 0.13
 - Azure provider configured
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
